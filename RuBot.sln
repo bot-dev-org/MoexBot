@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RuBot", "RuBot\RuBot.csproj", "{8763AE6B-F7BB-4FFF-AC2B-91C6D2F4139E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuikSharp", "QuikSharp\QuikSharp.csproj", "{9FEB86EE-4D24-4CB3-8356-ADE58992A1D6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8763AE6B-F7BB-4FFF-AC2B-91C6D2F4139E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8763AE6B-F7BB-4FFF-AC2B-91C6D2F4139E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8763AE6B-F7BB-4FFF-AC2B-91C6D2F4139E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8763AE6B-F7BB-4FFF-AC2B-91C6D2F4139E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FEB86EE-4D24-4CB3-8356-ADE58992A1D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FEB86EE-4D24-4CB3-8356-ADE58992A1D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FEB86EE-4D24-4CB3-8356-ADE58992A1D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FEB86EE-4D24-4CB3-8356-ADE58992A1D6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7968CAEF-5549-4F98-A148-B0E5E59E4F54}
+	EndGlobalSection
+EndGlobal

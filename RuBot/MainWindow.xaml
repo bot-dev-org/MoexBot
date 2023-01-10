@@ -1,0 +1,11 @@
+﻿<Window x:Class="RuBot.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="RuBot" Height="700" Width="900" Loaded="WindowLoaded">
+    <TabControl HorizontalAlignment="Stretch" x:Name="Tabs" VerticalAlignment="Stretch">
+        <TabControl.ItemContainerStyle>
+            <Style TargetType="TabItem">
+                <Setter Property="Header" Value="{Binding Header}" />
+            </Style>
+        </TabControl.ItemContainerStyle>
+    </TabControl>
+</Window>

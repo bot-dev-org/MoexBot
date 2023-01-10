@@ -1,0 +1,60 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RuBot.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="QuikPort" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">34130</Value>
+    </Setting>
+    <Setting Name="ClassCode" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">SPBFUT</Value>
+    </Setting>
+    <Setting Name="ACCID" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">410EO3Z</Value>
+    </Setting>
+    <Setting Name="SiTics" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\SiTics\</Value>
+    </Setting>
+    <Setting Name="SiCandles" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\SiCandles\</Value>
+    </Setting>
+    <Setting Name="EuCandles" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\EuCandles\</Value>
+    </Setting>
+    <Setting Name="EuTics" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\EuTics\</Value>
+    </Setting>
+    <Setting Name="SbrfTics" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\SbrfTics\</Value>
+    </Setting>
+    <Setting Name="SbrfCandles" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\SbrfCandles\</Value>
+    </Setting>
+    <Setting Name="BrCandles" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\BrCandles\</Value>
+    </Setting>
+    <Setting Name="BrTics" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\BrTics\</Value>
+    </Setting>
+    <Setting Name="GazrTics" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\GazrTics\</Value>
+    </Setting>
+    <Setting Name="GazrCandles" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\GazrCandles\</Value>
+    </Setting>
+    <Setting Name="SilvCandles" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\SilvCandles\</Value>
+    </Setting>
+    <Setting Name="SilvTics" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\SilvTics\</Value>
+    </Setting>
+    <Setting Name="VtbrTics" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\VtbrTics\</Value>
+    </Setting>
+    <Setting Name="VtbrCandles" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">c:\Downloads\robot_tests\VtbrCandles\</Value>
+    </Setting>
+    <Setting Name="tg_api_key" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">5903190184:AAHtUqdRDbEcznztMAs4HzjPJlikADYyxk0</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

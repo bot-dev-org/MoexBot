@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="RuBot.Views.ControlView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ViewModels="clr-namespace:RuBot.ViewModels" 
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+        <StackPanel>
+        <Grid Margin="20,20,0,0" HorizontalAlignment="Left">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Grid.Row="0" Width="100" Content="Подключиться" Command="ViewModels:ControlViewModel.Connect" Margin="10,0,0,0" />
+            <Button Grid.Column="0" Width="100" Grid.Row="1" Content="Старт" Command="ViewModels:ControlViewModel.Start" Margin="10,0,0,0" />
+            <Button Content="Задать параметр" Grid.Column="1" Grid.Row="0" Width="100" Command="ViewModels:ControlViewModel.SetParameter"/>
+            <Button Content="Котирование" Grid.Column="1" Grid.Row="1" Width="100" Command="ViewModels:ControlViewModel.Quoting"/>
+            <Label Grid.Column="0" Grid.Row="2" Content="Текущая позиция по Si:" />
+            <Label Grid.Column="1" Grid.Row="2" Content="{Binding OpenSiPosition, Mode=OneWay}" />
+            <Label Grid.Column="0" Grid.Row="3" Content="Текущая позиция по Eu:" />
+            <Label Grid.Column="1" Grid.Row="3" Content="{Binding OpenEuPosition, Mode=OneWay}" />
+            <Label Grid.Column="0" Grid.Row="4" Content="Текущая позиция по Sbrf:" />
+            <Label Grid.Column="1" Grid.Row="4" Content="{Binding OpenSbrfPosition, Mode=OneWay}" />
+            <Label Grid.Column="0" Grid.Row="5" Content="Текущая позиция по Br:" />
+            <Label Grid.Column="1" Grid.Row="5" Content="{Binding OpenBrPosition, Mode=OneWay}" />
+            <Label Grid.Column="0" Grid.Row="6" Content="Текущая позиция по Gazr:" />
+            <Label Grid.Column="1" Grid.Row="6" Content="{Binding OpenGazrPosition, Mode=OneWay}" />
+            <Label Grid.Column="0" Grid.Row="7" Content="Текущая позиция по Silv:" />
+            <Label Grid.Column="1" Grid.Row="7" Content="{Binding OpenSilvPosition, Mode=OneWay}" />
+            <Label Grid.Column="0" Grid.Row="8" Content="Текущая позиция по Vtbr:" />
+            <Label Grid.Column="1" Grid.Row="8" Content="{Binding OpenVtbrPosition, Mode=OneWay}" />
+        </Grid>
+        <Label Content="Errors:" Name="label1" Margin="20,10,0,0"/>
+        <ListBox Height="200" ItemsSource="{Binding Errors}" Width="300" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+    </StackPanel>
+</UserControl>
