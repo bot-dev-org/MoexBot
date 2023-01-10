@@ -54,7 +54,7 @@
       <Value Profile="(Default)">c:\Downloads\robot_tests\VtbrCandles\</Value>
     </Setting>
     <Setting Name="tg_api_key" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">5903190184:AAHtUqdRDbEcznztMAs4HzjPJlikADYyxk0</Value>
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

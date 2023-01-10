@@ -178,7 +178,7 @@ namespace RuBot.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5903190184:AAHtUqdRDbEcznztMAs4HzjPJlikADYyxk0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string tg_api_key {
             get {
                 return ((string)(this["tg_api_key"]));
