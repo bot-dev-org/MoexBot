@@ -28,7 +28,6 @@ namespace RuBot
         private DataManager _EuDataManager;
         private DataManager _SbrfDataManager;
         private DataManager _GazrDataManager;
-        private DataManager _VtbrDataManager;
         private DataManager _BrDataManager;
         private DataManager _SilvDataManager;
 
@@ -40,8 +39,7 @@ namespace RuBot
             { "sbrf", Settings.Default.SbrfTics },
             { "br", Settings.Default.BrTics },
             { "silv", Settings.Default.SilvTics },
-            { "si", Settings.Default.SiTics },
-            { "vtbr", Settings.Default.VtbrTics }
+            { "si", Settings.Default.SiTics }
         };
 
         private Dictionary<string, string> CandlesDirectoryMap = new Dictionary<string, string>{
@@ -50,8 +48,7 @@ namespace RuBot
             { "sbrf", Settings.Default.SbrfCandles },
             { "br", Settings.Default.BrCandles },
             { "silv", Settings.Default.SilvCandles },
-            { "si", Settings.Default.SiCandles },
-            { "vtbr", Settings.Default.VtbrCandles }
+            { "si", Settings.Default.SiCandles }
         };
 
         public MainWindow()
@@ -90,7 +87,6 @@ namespace RuBot
             _EuDataManager?.Close();
             _SbrfDataManager?.Close();
             _GazrDataManager?.Close();
-            _VtbrDataManager?.Close();
             _BrDataManager?.Close();
             _SilvDataManager?.Close();
             base.OnClosing(e);
@@ -146,8 +142,6 @@ namespace RuBot
                             _EuDataManager.RegisterStrategy(strategy);
                         else if (ticker == "sbrf")
                             _SbrfDataManager.RegisterStrategy(strategy);
-                        else if (ticker == "vtbr")
-                            _VtbrDataManager.RegisterStrategy(strategy);
                         else if (ticker == "silv")
                             _SilvDataManager.RegisterStrategy(strategy);
                         else if (ticker == "br")
@@ -181,9 +175,6 @@ namespace RuBot
             Logger.LogDebug("Creating Gazr data manager");
             _GazrDataManager = new DataManager(CandlesDirectoryMap["gazr"], TicsDirectoryMap["gazr"], "Gazr");
 
-            Logger.LogDebug("Creating Vtbr data manager");
-            _VtbrDataManager = new DataManager(CandlesDirectoryMap["vtbr"], TicsDirectoryMap["vtbr"], "Vtbr");
-
             Logger.LogDebug("Creating Br data manager");
             _BrDataManager = new DataManager(CandlesDirectoryMap["br"], TicsDirectoryMap["br"], "Br");
 
@@ -196,7 +187,6 @@ namespace RuBot
             _terminalModel.Strategies.AddRange(_EuDataManager.Strategies);
             _terminalModel.Strategies.AddRange(_SbrfDataManager.Strategies);
             _terminalModel.Strategies.AddRange(_GazrDataManager.Strategies);
-            _terminalModel.Strategies.AddRange(_VtbrDataManager.Strategies);
             _terminalModel.Strategies.AddRange(_BrDataManager.Strategies);
             _terminalModel.Strategies.AddRange(_SilvDataManager.Strategies);
         }
@@ -215,9 +205,6 @@ namespace RuBot
             orderHandler = new NewOrderHandler(_terminalModel.GazrSecurity, _terminalModel, Settings.Default.ACCID);
             _GazrDataManager.Strategies.ForEach(orderHandler.RegisterStrategy);
 
-            orderHandler = new NewOrderHandler(_terminalModel.VtbrSecurity, _terminalModel, Settings.Default.ACCID);
-            _VtbrDataManager.Strategies.ForEach(orderHandler.RegisterStrategy);
-
             orderHandler = new NewOrderHandler(_terminalModel.BrSecurity, _terminalModel, Settings.Default.ACCID);
             _BrDataManager.Strategies.ForEach(orderHandler.RegisterStrategy);
 
@@ -232,7 +219,6 @@ namespace RuBot
             _EuDataManager.Strategies.ForEach(s => s.Security = _terminalModel.EuSecurity);
             _SbrfDataManager.Strategies.ForEach(s => s.Security = _terminalModel.SbrfSecurity);
             _GazrDataManager.Strategies.ForEach(s => s.Security = _terminalModel.GazrSecurity);
-            _VtbrDataManager.Strategies.ForEach(s => s.Security = _terminalModel.VtbrSecurity);
             _BrDataManager.Strategies.ForEach(s => s.Security = _terminalModel.BrSecurity);
             _SilvDataManager.Strategies.ForEach(s => s.Security = _terminalModel.SilvSecurity);
 
@@ -240,7 +226,6 @@ namespace RuBot
             _terminalModel.EuManager.OnTic += t => _EuDataManager.ProcessTrade(t);
             _terminalModel.SbrfManager.OnTic += t => _SbrfDataManager.ProcessTrade(t);
             _terminalModel.GazrManager.OnTic += t => _GazrDataManager.ProcessTrade(t);
-            _terminalModel.VtbrManager.OnTic += t => _VtbrDataManager.ProcessTrade(t);
             _terminalModel.BrManager.OnTic += t => _BrDataManager.ProcessTrade(t);
             _terminalModel.SilvManager.OnTic += t => _SilvDataManager.ProcessTrade(t);
 
@@ -248,7 +233,6 @@ namespace RuBot
             _terminalModel.SbrfManager.OnSecurityStopped += _SbrfDataManager.ResetSecurity;
             _terminalModel.EuManager.OnSecurityStopped += _EuDataManager.ResetSecurity;
             _terminalModel.GazrManager.OnSecurityStopped += _GazrDataManager.ResetSecurity;
-            _terminalModel.VtbrManager.OnSecurityStopped += _VtbrDataManager.ResetSecurity;
             _terminalModel.BrManager.OnSecurityStopped += _BrDataManager.ResetSecurity;
             _terminalModel.SilvManager.OnSecurityStopped += _SilvDataManager.ResetSecurity;
 
@@ -256,7 +240,6 @@ namespace RuBot
             _terminalModel.EuManager.Strategies = _EuDataManager.Strategies;
             _terminalModel.SbrfManager.Strategies = _SbrfDataManager.Strategies;
             _terminalModel.GazrManager.Strategies = _GazrDataManager.Strategies;
-            _terminalModel.VtbrManager.Strategies = _VtbrDataManager.Strategies;
             _terminalModel.BrManager.Strategies = _BrDataManager.Strategies;
             _terminalModel.SilvManager.Strategies = _SilvDataManager.Strategies;
         }

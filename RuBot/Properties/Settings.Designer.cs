@@ -184,5 +184,14 @@ namespace RuBot.Properties {
                 return ((string)(this["tg_api_key"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5915945782:AAEUJIS0wr-gpxNt4yLkmC9FxZbIqRmiROU")]
+        public string tg_crit_api_key {
+            get {
+                return ((string)(this["tg_crit_api_key"]));
+            }
+        }
     }
 }

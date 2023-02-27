@@ -203,6 +203,7 @@ namespace RuBot
                     if (candle != null)
                     {
 						var time = candle.Time + TimeSpan.FromMinutes(timeFrame) - TimeSpan.FromMilliseconds(1);
+                        var prevCandleTime = candle.Time;
                         if (tradeTime > time)
                         {
                             //Logger.LogDebug($"New candle {tradeTime} {time} {candle.Time}");
@@ -222,21 +223,21 @@ namespace RuBot
                                     List<AllTrade> candleTrades = null;
                                     lock (_registeredTimeFrames)
                                     {
-                                        _ticsBuffer.Sort((t1,t2) => t1.TradeNum.CompareTo(t2.TradeNum));
-                                        candleTrades = _ticsBuffer.Where(t => (DateTime) t.Datetime < time).ToList();
-                                        _ticsBuffer.RemoveAll(t => (DateTime) t.Datetime < time);
+                                        _ticsBuffer.Sort((t1,t2) => t1.DateTime.CompareTo(t2.DateTime));
+                                        candleTrades = _ticsBuffer.Where(t => t.DateTime <= time && t.DateTime.Date == lastCandleTime.Date).ToList();
+                                        _ticsBuffer.RemoveAll(t => t.DateTime <= time);
                                     }
                                     var sb = new StringBuilder();
                                     foreach (var allTrade in candleTrades)
                                     {
                                         sb.AppendLine(string.Format(_commaNFI, "{0};{1};{2}",
-                                            ((DateTime) allTrade.Datetime).ToString("HHmmss",
-                                                CultureInfo.InvariantCulture), allTrade.Price, allTrade.Qty));
+                                            allTrade.DateTime.ToString("HHmmss",
+                                            CultureInfo.InvariantCulture), allTrade.Price, allTrade.Qty));
                                     }
                                     lock (BaseStrategy.TicsLocker)
                                     {
                                         File.AppendAllText(_ticsDataFolder + Path.DirectorySeparatorChar +
-                                            time.Date.ToString("yyyyMMdd") + BaseStrategy.TicsEndFileName, sb.ToString(),
+                                            lastCandleTime.Date.ToString("yyyyMMdd") + BaseStrategy.TicsEndFileName, sb.ToString(),
                                             Encoding.ASCII);
                                     }
                                 });
@@ -254,46 +255,19 @@ namespace RuBot
                     candle.Volume += (int)trade.Qty;
                 }
             }
-            if (tradeTime > _lastProcessedTicTime)
+            lock (_registeredTimeFrames)
             {
-                _lastProcessedTicTime = tradeTime.AddSeconds(-1);
-                lock (_registeredTimeFrames)
+                if (tradeTime > _lastProcessedTicTime)
                 {
-                    _ticsBuffer.Add(trade);//Append(string.Format(_commaNFI, "{0};{1};{2}{3}",
-                        //tradeTime.ToString("HHmmss", CultureInfo.InvariantCulture), trade.Price, trade.Qty, Environment.NewLine));
-                }
-                foreach (var strategy in Strategies)
-                {
-                    strategy.OrderHandler.CheckOrders(trade);
-                }
-                if (tradeTime.Hour == 17 && tradeTime.Minute >= 40 && !_finalDayTicsThreadStarted)
-                {
-                    _finalDayTicsThreadStarted = true;
-                    var time = tradeTime;
-                    ThreadPool.QueueUserWorkItem(delegate
+                    _lastProcessedTicTime = tradeTime.AddSeconds(-1);
+                        _ticsBuffer.Add(trade);//Append(string.Format(_commaNFI, "{0};{1};{2}{3}",
+                            //tradeTime.ToString("HHmmss", CultureInfo.InvariantCulture), trade.Price, trade.Qty, Environment.NewLine));
+                    foreach (var strategy in Strategies)
                     {
-                        Thread.Sleep(601000);
-                        var sb = new StringBuilder();
-                        lock (_registeredTimeFrames)
-                        {
-                            _ticsBuffer.Sort((t1, t2) => t1.TradeNum.CompareTo(t2.TradeNum));
-                            foreach (var allTrade in _ticsBuffer)
-                            {
-                                sb.AppendLine(string.Format(_commaNFI, "{0};{1};{2}",
-                                    ((DateTime)allTrade.Datetime).ToString("HHmmss",
-                                        CultureInfo.InvariantCulture), allTrade.Price, allTrade.Qty));
-                            }
-                            _ticsBuffer.Clear();
-                        }
-                        lock (BaseStrategy.TicsLocker)
-                        {
-                            File.AppendAllText(_ticsDataFolder + Path.DirectorySeparatorChar +
-                                time.Date.ToString("yyyyMMdd") + BaseStrategy.TicsEndFileName, sb.ToString(),
-                                Encoding.ASCII);
-                        }
-                        _finalDayTicsThreadStarted = false;
-                    });
+                        strategy.OrderHandler.CheckOrders(trade);
+                    }
                 }
+
             }
             if (locking)
                 Interlocked.Exchange(ref _allTradeFlag, 0);

@@ -102,7 +102,7 @@ namespace QuikSharp.DataStructures
         [JsonProperty("datetime")]
         public QuikDateTime Datetime { get; set; }
 
-        public DateTime DateTime => (DateTime) Datetime;
+        public DateTime DateTime => Datetime.DateTime;
 
         /// <summary>
         /// Период торговой сессии. Возможные значения:

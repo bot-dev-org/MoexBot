@@ -179,7 +179,7 @@ namespace RuBot.Models
                     CurrentSecurity = _securities[0];
                     if (CurrentSecurity.ExpDate - DateTime.Now < TimeSpan.FromDays(4))
                     {
-                        Logger.LogDebug($"Changing Security: {CurrentSecurity.SecCode} exp: {CurrentSecurity.ExpDate} Securities {string.Join(";", _securities.Select(s => s.SecCode).ToArray())}");
+                        Logger.SendCritTelegramMessage($"Changing Security: {CurrentSecurity.SecCode} exp: {CurrentSecurity.ExpDate} Securities {string.Join(";", _securities.Select(s => s.SecCode).ToArray())}");
                         var result = _tradingFunctions.GetFuturesHolding(Account.Firmid, Account.TrdaccId, CurrentSecurity.SecCode, 0).Result;
                         int net;
                         if (result != null)

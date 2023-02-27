@@ -11,9 +11,6 @@ using RuBot.ViewModels.Strategies;
 using QuikSharp;
 using QuikSharp.DataStructures;
 using QuikSharp.DataStructures.Transaction;
-using System.Security;
-using System.Text;
-using System.IO;
 
 namespace RuBot.Models.Terminal
 {
@@ -50,8 +47,8 @@ namespace RuBot.Models.Terminal
         public event Action OnFuturesClientHolding;
         public event Action<string> OnProcessDataError;
         private readonly ConcurrentQueue<AllTrade> _allTradesQueue = new ConcurrentQueue<AllTrade>();
-        private long _allTradeFlag;
         private bool isConnected = false;
+        public bool IsTradingState = false;
 
         private readonly int _quikPort;
 
@@ -59,22 +56,34 @@ namespace RuBot.Models.Terminal
         {
             _classCode = classCode;
             _quikPort = quikPort;
-            var connectionMonitorThread = new Thread(() => 
+            var thread = new Thread(() =>
             {
+                AllTrade lastTrade = null;
                 while (true)
                 {
-                    Thread.Sleep(60000);
-                    var now = DateTime.Now;
-                    if (now.DayOfWeek == DayOfWeek.Sunday || now.DayOfWeek == DayOfWeek.Saturday)
-                        continue;
-                    if (now.Hour < 7)
-                        continue;
-                    if (!_quik.Service.IsConnected().Result)
-                    {
-                        Logger.Log("Terminal is disconnected");
+                    try { 
+                        while (!isConnected || securityManagers.Any(sm => sm.CurrentSecurity == null))
+                        { Thread.Sleep(1000); }
+                        while (_allTradesQueue.TryDequeue(out lastTrade))
+                        {
+                            var sm = securityManagers.FirstOrDefault(s => lastTrade.SecCode.StartsWith(s.Type));
+                            if (sm != null)
+                                sm.ProcessTic(lastTrade);
+                        }
+                        if (_allTradesQueue.IsEmpty && lastTrade != null)
+                        {
+                            var newIsTradingState = lastTrade.DateTime > DateTime.Now - TimeSpan.FromMinutes(1);
+                            if (newIsTradingState != IsTradingState)
+                            {
+                                IsTradingState = newIsTradingState;
+                                securityManagers.ForEach(sm => sm.Work = IsTradingState);
+                            }
+                        }
                     }
+                    catch (Exception ex) { Logger.SendCritTelegramMessage("Exception on trade processing: " + ex.Message); }
                 }
             });
+            thread.Start();
         }
 
         public void Connect()
@@ -117,7 +126,6 @@ namespace RuBot.Models.Terminal
                 securityManagers.AddRange(new [] { SiManager, EuManager, SbrfManager, BrManager, GazrManager, VtbrManager, SilvManager});
                 Logger.LogDebug("QuikTerminalModel connected");
                 OnConnected?.Invoke();
-                securityManagers.ForEach(sm => sm.Work = true);
                 isConnected = true;
             });
             thread.Start();
@@ -183,7 +191,6 @@ namespace RuBot.Models.Terminal
 
             OnProcessDataError("Terminal is disconnected");
             isConnected = false;
-            securityManagers.ForEach(sm => sm.Work = false);
         }
 
         private void Events_OnConnected()
@@ -191,7 +198,6 @@ namespace RuBot.Models.Terminal
             OnProcessDataError("Terminal is connected");
             Strategies.ForEach(s => s.Serialize());
             isConnected = true;
-            securityManagers.ForEach(sm => sm.Work = true);
         }
 
         private void Events_OnClose()
@@ -239,23 +245,6 @@ namespace RuBot.Models.Terminal
         private void ProcessTic(AllTrade trade)
         {
             _allTradesQueue.Enqueue(trade);
-            if (Interlocked.Increment(ref _allTradeFlag) != 1)
-                return;
-            var thread = new Thread(() =>
-            {
-                while (!isConnected || securityManagers.Any(sm => sm.CurrentSecurity == null))
-                { Thread.Sleep(1000);}
-                while (_allTradesQueue.TryDequeue(out var outTrade))
-                {
-                    var sm = securityManagers.FirstOrDefault(s => outTrade.SecCode.StartsWith(s.Type));
-                    if (sm != null)
-                        sm.ProcessTic(outTrade);
-                    if (_allTradesQueue.IsEmpty)
-                        Thread.Sleep(100);
-                }
-                Interlocked.Exchange(ref _allTradeFlag, 0);
-            });
-            thread.Start();
         }
 
         public void Close()

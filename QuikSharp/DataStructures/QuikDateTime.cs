@@ -56,6 +56,19 @@ namespace QuikSharp.DataStructures
         /// </summary>
         public int year { get; set; }
 
+        public DateTime DateTime
+        {
+            get
+            {
+                if (dateTime == DateTime.MinValue)
+                    dateTime = (DateTime)this;
+                return dateTime;
+            }
+        }
+
+        private DateTime dateTime = DateTime.MinValue;
+
+
         // ReSharper restore InconsistentNaming
         /// <summary>
         ///

@@ -15,6 +15,7 @@ namespace RuBot.Utils
         private static int _logCount;
         private static DateTime _logTime;
         private static string telegramApiKey = Settings.Default.tg_api_key;
+        private static string telegramCritApiKey = Settings.Default.tg_crit_api_key;
         private static string telegramChatId = @"371924007";
         public static string MessageTitle = GetLocalIPAddress();
 
@@ -122,6 +123,22 @@ namespace RuBot.Utils
             {
                 LogDebug(urlString + "\n" + exp.Message + "\n" + "Source: " + exp.Source + "\n" + "StackTrace: \n" + exp.StackTrace);
             }
+        }
+        public static void SendCritTelegramMessage(string message)
+        {
+            var urlString = $"https://api.telegram.org/bot{telegramCritApiKey}/sendMessage?chat_id={telegramChatId}&text={message}";
+            try
+            {
+                using (var webclient = new WebClient())
+                {
+                    webclient.DownloadString(urlString);
+                }
+            }
+            catch (Exception exp)
+            {
+                LogDebug(urlString + "\n" + exp.Message + "\n" + "Source: " + exp.Source + "\n" + "StackTrace: \n" + exp.StackTrace);
+            }
+            Log(message);
         }
     }
 }
