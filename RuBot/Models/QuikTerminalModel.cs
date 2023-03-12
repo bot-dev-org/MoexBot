@@ -63,7 +63,19 @@ namespace RuBot.Models.Terminal
                 {
                     try { 
                         while (!isConnected || securityManagers.Any(sm => sm.CurrentSecurity == null))
-                        { Thread.Sleep(1000); }
+                        {
+                            if (_allTradesQueue.IsEmpty && lastTrade != null)
+                            {
+                                var newIsTradingState = lastTrade.DateTime > DateTime.Now - TimeSpan.FromMinutes(1);
+                                if (newIsTradingState != IsTradingState)
+                                {
+                                    IsTradingState = newIsTradingState;
+                                    Logger.Log($"Trading: {IsTradingState}");
+                                    securityManagers.ForEach(sm => sm.Work = IsTradingState);
+                                }
+                            }
+                            Thread.Sleep(1000); 
+                        }
                         while (_allTradesQueue.TryDequeue(out lastTrade))
                         {
                             var sm = securityManagers.FirstOrDefault(s => lastTrade.SecCode.StartsWith(s.Type));
@@ -76,6 +88,7 @@ namespace RuBot.Models.Terminal
                             if (newIsTradingState != IsTradingState)
                             {
                                 IsTradingState = newIsTradingState;
+                                Logger.Log($"Trading: {IsTradingState}");
                                 securityManagers.ForEach(sm => sm.Work = IsTradingState);
                             }
                         }
