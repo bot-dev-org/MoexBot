@@ -33,7 +33,11 @@ namespace RuBot.Models
         public event Action<AllTrade> OnTic;
         public event Action<List<AllTrade>> OnSecurityStopped;
         public static TradesAccounts Account;
-        public bool Work = true;
+        public bool Work = false;
+
+        private TimeSpan SwitchContractTime = TimeSpan.FromDays(4);
+        private DateTime WhenToSwitchContractTime => CurrentSecurity.ExpDate - SwitchContractTime;
+        private DateTime WhenToCollectNextContractTradesTime => CurrentSecurity.ExpDate - SwitchContractTime - TimeSpan.FromHours(1);
 
         static SecurityManager(){
             var utilThread = new Thread(() =>
@@ -177,7 +181,7 @@ namespace RuBot.Models
                 while (true)
                 {
                     CurrentSecurity = _securities[0];
-                    if (CurrentSecurity.ExpDate - DateTime.Now < TimeSpan.FromDays(4))
+                    if ( DateTime.Now > WhenToSwitchContractTime)
                     {
                         Logger.SendCritTelegramMessage($"Changing Security: {CurrentSecurity.SecCode} exp: {CurrentSecurity.ExpDate} Securities {string.Join(";", _securities.Select(s => s.SecCode).ToArray())}");
                         var result = _tradingFunctions.GetFuturesHolding(Account.Firmid, Account.TrdaccId, CurrentSecurity.SecCode, 0).Result;
@@ -234,7 +238,7 @@ namespace RuBot.Models
                 OnTic?.Invoke(trade);
                 CurrentSecurity.CurrentPrice = trade.Price;
             }
-            if (trade.SecCode.Equals(_securities[1].SecCode))
+            if (trade.SecCode.Equals(_securities[1].SecCode) && trade.DateTime > WhenToCollectNextContractTradesTime)
             {
                 _nextSecTrades.Add(trade);
                 _securities[1].CurrentPrice = trade.Price;

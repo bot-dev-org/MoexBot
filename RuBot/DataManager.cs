@@ -31,7 +31,6 @@ namespace RuBot
         private DateTime _lastProcessedTicTime;
         private readonly NumberFormatInfo _commaNFI = new NumberFormatInfo { NumberDecimalSeparator = "," };
         protected const double Epsilon = 0.000000001;
-        private bool _finalDayTicsThreadStarted;
         private int _maxTimeFrame = 1;
         private long _allTradeFlag = 0;
 

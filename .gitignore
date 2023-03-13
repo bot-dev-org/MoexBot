@@ -5,3 +5,6 @@
 /.vs
 /QuikSharp/obj
 /RuBot/obj
+/RuBot/bin/Debug/net7.0-windows/RuBot.pdb
+/RuBot/bin/Debug/net7.0-windows/RuBot.dll.config
+/RuBot/bin/Debug/net7.0-windows/RuBot.dll

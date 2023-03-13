@@ -76,13 +76,14 @@ namespace RuBot.Models.Terminal
                             }
                             Thread.Sleep(1000); 
                         }
-                        while (_allTradesQueue.TryDequeue(out lastTrade))
+                        while (_allTradesQueue.TryDequeue(out var newTrade))
                         {
-                            var sm = securityManagers.FirstOrDefault(s => lastTrade.SecCode.StartsWith(s.Type));
+                            var sm = securityManagers.FirstOrDefault(s => newTrade.SecCode.StartsWith(s.Type));
                             if (sm != null)
-                                sm.ProcessTic(lastTrade);
+                                sm.ProcessTic(newTrade);
+                            lastTrade = newTrade;
                         }
-                        if (_allTradesQueue.IsEmpty && lastTrade != null)
+                        if (lastTrade != null)
                         {
                             var newIsTradingState = lastTrade.DateTime > DateTime.Now - TimeSpan.FromMinutes(1);
                             if (newIsTradingState != IsTradingState)
@@ -96,6 +97,7 @@ namespace RuBot.Models.Terminal
                     catch (Exception ex) { Logger.SendCritTelegramMessage("Exception on trade processing: " + ex.Message); }
                 }
             });
+            thread.IsBackground = true;
             thread.Start();
         }
 
